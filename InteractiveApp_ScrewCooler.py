@@ -9,6 +9,49 @@ from scipy.optimize import root_scalar
 # in terminal write:    streamlit run InteractiveApp_ScrewCooler.py
 # ctrl+c to abort terminal..
 
+# ------------------- Setup -------------------
+st.set_page_config(layout="wide")
+st.title("Biochar Screw Cooler")
+
+# ------------------- Control Panel -------------------
+
+# Simulation properties
+st.sidebar.markdown("### Simulation Parameters")
+T_target = st.sidebar.number_input("Biochar Target Temperature (°C)", min_value=10, max_value=350, value=30, step=10)
+cool_shaft = st.sidebar.checkbox("Enable Shaft Cooling", True)
+
+# Biochar flow rate slider (kg/hr)
+m_biochar_kg_hr = st.sidebar.slider("Biochar Mass Flow Rate (kg/hr)", 10, 300, 80, step=10)
+m_biochar = m_biochar_kg_hr / 3600  # convert to kg/s
+
+
+# Screw parameters
+st.sidebar.markdown("### Screw Parameters")
+rpm = st.sidebar.slider("Screw RPM", 1, 8, 6)
+screw_diameter = st.sidebar.slider("Screw Diameter (mm)", 100, 300, 140)
+screw_pitch_ratio = st.sidebar.slider("Pitch / Diameter Ratio", 0.1, 1.5, 0.5)
+
+
+# Biochar properties inputs
+st.sidebar.markdown("### Biochar Properties")
+rho_biochar = st.sidebar.number_input("Density (kg/m³)", min_value=100.0, max_value=2000.0, value=615.0, step=10.0)
+C_biochar = st.sidebar.number_input("Heat Capacity (J/kg·K)", min_value=100.0, max_value=3000.0, value=1200.0, step=10.0)
+lambda_biochar = st.sidebar.number_input("Thermal Conductivity (W/m·K)", min_value=0.01, max_value=1.0, value=0.12, step=0.01)
+
+# ------------------- Acknowledgement -------------------
+# Sidebar citation in a styled info box
+st.sidebar.info("""
+**Acknowledgement**  
+This app is based on the following publication:
+
+**Paweł Regucki, Renata Krzyżyńska, Zbyszek Szeliga**  
+*Mathematical model for a single screw ash cooler of a circulating fluidized bed boiler*,  
+**Powder Technology**, Volume 396, Part A, 2022, Pages 50–58.  
+ISSN: 0032-5910  
+[DOI: 10.1016/j.powtec.2021.10.044](https://doi.org/10.1016/j.powtec.2021.10.044)  
+[ScienceDirect Link](https://www.sciencedirect.com/science/article/pii/S0032591021009268)
+""")
+
 # ------------------- Constants -------------------
 g = 9.81
 pi = np.pi
@@ -254,46 +297,3 @@ with col2:
         st.pyplot(fig, use_container_width=True)
 
     plot_perimeters()
-
-# ------------------- Setup -------------------
-st.set_page_config(layout="wide")
-st.title("Biochar Screw Cooler")
-
-# ------------------- Control Panel -------------------
-
-# Simulation properties
-st.sidebar.markdown("### Simulation Parameters")
-T_target = st.sidebar.number_input("Biochar Target Temperature (°C)", min_value=10, max_value=350, value=30, step=10)
-cool_shaft = st.sidebar.checkbox("Enable Shaft Cooling", True)
-
-# Biochar flow rate slider (kg/hr)
-m_biochar_kg_hr = st.sidebar.slider("Biochar Mass Flow Rate (kg/hr)", 10, 300, 80, step=10)
-m_biochar = m_biochar_kg_hr / 3600  # convert to kg/s
-
-
-# Screw parameters
-st.sidebar.markdown("### Screw Parameters")
-rpm = st.sidebar.slider("Screw RPM", 1, 8, 6)
-screw_diameter = st.sidebar.slider("Screw Diameter (mm)", 100, 300, 140)
-screw_pitch_ratio = st.sidebar.slider("Pitch / Diameter Ratio", 0.1, 1.5, 0.5)
-
-
-# Biochar properties inputs
-st.sidebar.markdown("### Biochar Properties")
-rho_biochar = st.sidebar.number_input("Density (kg/m³)", min_value=100.0, max_value=2000.0, value=615.0, step=10.0)
-C_biochar = st.sidebar.number_input("Heat Capacity (J/kg·K)", min_value=100.0, max_value=3000.0, value=1200.0, step=10.0)
-lambda_biochar = st.sidebar.number_input("Thermal Conductivity (W/m·K)", min_value=0.01, max_value=1.0, value=0.12, step=0.01)
-
-# ------------------- Acknowledgement -------------------
-# Sidebar citation in a styled info box
-st.sidebar.info("""
-**Acknowledgement**  
-This app is based on the following publication:
-
-**Paweł Regucki, Renata Krzyżyńska, Zbyszek Szeliga**  
-*Mathematical model for a single screw ash cooler of a circulating fluidized bed boiler*,  
-**Powder Technology**, Volume 396, Part A, 2022, Pages 50–58.  
-ISSN: 0032-5910  
-[DOI: 10.1016/j.powtec.2021.10.044](https://doi.org/10.1016/j.powtec.2021.10.044)  
-[ScienceDirect Link](https://www.sciencedirect.com/science/article/pii/S0032591021009268)
-""")
