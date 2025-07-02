@@ -27,6 +27,12 @@ ISSN: 0032-5910
 [ScienceDirect Link](https://www.sciencedirect.com/science/article/pii/S0032591021009268)
 """)
 
+st.sidebar.info("""
+**Acknowledgement**  
+This app is based on the research by Regucki et al.  
+We gratefully acknowledge their contributions.
+""")
+
 # ------------------- Control Panel -------------------
 
 # Simulation properties
