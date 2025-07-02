@@ -18,6 +18,7 @@ st.title("Biochar Screw Cooler")
 # Simulation properties
 st.sidebar.markdown("### Simulation Parameters")
 T_target = st.sidebar.number_input("Biochar Target Temperature (°C)", min_value=10, max_value=350, value=30, step=10)
+cool_shaft = st.sidebar.checkbox("Enable Shaft Cooling", True)
 
 # Biochar flow rate slider (kg/hr)
 m_biochar_kg_hr = st.sidebar.slider("Biochar Mass Flow Rate (kg/hr)", 10, 300, 80, step=10)
@@ -27,7 +28,6 @@ m_biochar = m_biochar_kg_hr / 3600  # convert to kg/s
 # Screw parameters
 st.sidebar.markdown("### Screw Parameters")
 rpm = st.sidebar.slider("Screw RPM", 1, 8, 6)
-cool_shaft = st.sidebar.checkbox("Enable Shaft Cooling", True)
 screw_diameter = st.sidebar.slider("Screw Diameter (mm)", 100, 300, 140)
 screw_pitch_ratio = st.sidebar.slider("Pitch / Diameter Ratio", 0.1, 1.5, 0.5)
 
