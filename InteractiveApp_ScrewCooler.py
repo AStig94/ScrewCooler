@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from scipy.optimize import root_scalar
 
 # ------------------- How to -------------------
+# If using VSC (else just use the streamlit app:    https://screwcooler.streamlit.app/
 # Make sure you are in the right folder. "cd .." goes one folder up, "cd+space+shift" autofills destination.
 # in terminal write:    streamlit run InteractiveApp_ScrewCooler.py
 # ctrl+c to abort terminal..
@@ -14,21 +15,29 @@ st.title("Biochar Screw Cooler")
 
 # ------------------- Control Panel -------------------
 
+# Simulation properties
+st.sidebar.markdown("### Simulation Parameters")
+T_target = st.sidebar.number_input("Biochar Target Temperature (°C)", min_value=10, max_value=350, value=30, step=10)
+
+# Biochar flow rate slider (kg/hr)
+m_biochar_kg_hr = st.sidebar.slider("Biochar Mass Flow Rate (kg/hr)", 10, 300, 80, step=10)
+m_biochar = m_biochar_kg_hr / 3600  # convert to kg/s
+
+
 # Screw parameters
+st.sidebar.markdown("### Screw Parameters")
 rpm = st.sidebar.slider("Screw RPM", 1, 8, 6)
 cool_shaft = st.sidebar.checkbox("Enable Shaft Cooling", True)
 screw_diameter = st.sidebar.slider("Screw Diameter (mm)", 100, 300, 140)
 screw_pitch_ratio = st.sidebar.slider("Pitch / Diameter Ratio", 0.1, 1.5, 0.5)
 
-# New: Biochar flow rate slider (kg/hr)
-m_biochar_kg_hr = st.sidebar.slider("Biochar Mass Flow Rate (kg/hr)", 10, 300, 80, step=10)
-m_biochar = m_biochar_kg_hr / 3600  # convert to kg/s
 
-# New: Biochar properties inputs
+# Biochar properties inputs
 st.sidebar.markdown("### Biochar Properties")
 rho_biochar = st.sidebar.number_input("Density (kg/m³)", min_value=100.0, max_value=2000.0, value=615.0, step=10.0)
 C_biochar = st.sidebar.number_input("Heat Capacity (J/kg·K)", min_value=100.0, max_value=3000.0, value=1200.0, step=10.0)
 lambda_biochar = st.sidebar.number_input("Thermal Conductivity (W/m·K)", min_value=0.01, max_value=1.0, value=0.12, step=0.01)
+
 
 # ------------------- Constants -------------------
 g = 9.81
@@ -197,7 +206,7 @@ with col1:
             t_s[i+1] = t_s[i] + dQ_s / (rho_water * C_water * q_v_water_s) if cool_shaft else t_s[i]
             t_c[i+1] = t_c[i] + dQ_c / (rho_water * C_water * q_v_water_c)
 
-            if t_a[i+1] < 30:
+            if t_a[i+1] < T_target:
                 required_length = x_grid[i+1]
                 break
         else:
