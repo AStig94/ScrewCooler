@@ -17,7 +17,7 @@ st.title("Biochar Screw Cooler")
 
 # Simulation properties
 st.sidebar.markdown("### Simulation Parameters")
-T_target = st.sidebar.number_input("Biochar Target Temperature (°C)", min_value=10, max_value=350, value=30, step=10)
+T_target = st.sidebar.number_input("Biochar Target Temperature (°C)", min_value=30, max_value=350, value=30, step=10)
 cool_shaft = st.sidebar.checkbox("Enable Shaft Cooling", True)
 
 # Biochar flow rate slider (kg/hr)
@@ -225,7 +225,10 @@ with col1:
         else:
             required_length = max_length
 
-        label = f"x = {x_model}, L = {required_length:.2f} m"
+        if required_length >= max_length:
+            label = f"x = {x_model}, L > {max_length:.1f} m"
+        else:
+            label = f"x = {x_model}, L = {required_length:.2f} m"
         ax.plot(x_grid[:i+2], t_a[:i+2], label=label)
         results.append((x_model, required_length, alpha_s if cool_shaft else 0.0, alpha_c))
 
