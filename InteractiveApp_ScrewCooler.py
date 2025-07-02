@@ -13,20 +13,6 @@ from scipy.optimize import root_scalar
 st.set_page_config(layout="wide")
 st.title("Biochar Screw Cooler")
 
-# ------------------- Acknowledgement -------------------
-# Sidebar citation in a styled info box
-st.sidebar.info("""
-**Acknowledgement**  
-This app is based on the following publication:
-
-**Paweł Regucki, Renata Krzyżyńska, Zbyszek Szeliga**  
-*Mathematical model for a single screw ash cooler of a circulating fluidized bed boiler*,  
-**Powder Technology**, Volume 396, Part A, 2022, Pages 50–58.  
-ISSN: 0032-5910  
-[DOI: 10.1016/j.powtec.2021.10.044](https://doi.org/10.1016/j.powtec.2021.10.044)  
-[ScienceDirect Link](https://www.sciencedirect.com/science/article/pii/S0032591021009268)
-""")
-
 # ------------------- Control Panel -------------------
 
 # Simulation properties
@@ -52,6 +38,19 @@ rho_biochar = st.sidebar.number_input("Density (kg/m³)", min_value=100.0, max_v
 C_biochar = st.sidebar.number_input("Heat Capacity (J/kg·K)", min_value=100.0, max_value=3000.0, value=1200.0, step=10.0)
 lambda_biochar = st.sidebar.number_input("Thermal Conductivity (W/m·K)", min_value=0.01, max_value=1.0, value=0.12, step=0.01)
 
+# ------------------- Acknowledgement -------------------
+# Sidebar citation in a styled info box
+st.sidebar.info("""
+**Acknowledgement**  
+This app is based on the following publication:
+
+**Paweł Regucki, Renata Krzyżyńska, Zbyszek Szeliga**  
+*Mathematical model for a single screw ash cooler of a circulating fluidized bed boiler*,  
+**Powder Technology**, Volume 396, Part A, 2022, Pages 50–58.  
+ISSN: 0032-5910  
+[DOI: 10.1016/j.powtec.2021.10.044](https://doi.org/10.1016/j.powtec.2021.10.044)  
+[ScienceDirect Link](https://www.sciencedirect.com/science/article/pii/S0032591021009268)
+""")
 
 # ------------------- Constants -------------------
 g = 9.81
