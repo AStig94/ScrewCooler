@@ -24,7 +24,8 @@ This app is based on the following paper:
 **Powder Technology**, Volume 396, Part A, 2022, Pages 50-58.  
 ISSN: 0032-5910  
 [https://doi.org/10.1016/j.powtec.2021.10.044](https://doi.org/10.1016/j.powtec.2021.10.044)  
-[ScienceDirect Link](https://www.sciencedirect.com/science/article/pii/S0032591021009268)**
+[ScienceDirect Link](https://www.sciencedirect.com/science/article/pii/S0032591021009268)
+""")
 
 # ------------------- Control Panel -------------------
 
