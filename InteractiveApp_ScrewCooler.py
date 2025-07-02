@@ -14,23 +14,17 @@ st.set_page_config(layout="wide")
 st.title("Biochar Screw Cooler")
 
 # ------------------- Acknowledgement -------------------
-st.markdown("""
-### Citation and Acknowledgment
-
-This app is based on the following paper:
+# Sidebar citation in a styled info box
+st.sidebar.info("""
+**Acknowledgement**  
+This app is based on the following publication:
 
 **Paweł Regucki, Renata Krzyżyńska, Zbyszek Szeliga**  
 *Mathematical model for a single screw ash cooler of a circulating fluidized bed boiler*,  
-**Powder Technology**, Volume 396, Part A, 2022, Pages 50-58.  
+**Powder Technology**, Volume 396, Part A, 2022, Pages 50–58.  
 ISSN: 0032-5910  
-[https://doi.org/10.1016/j.powtec.2021.10.044](https://doi.org/10.1016/j.powtec.2021.10.044)  
+[DOI: 10.1016/j.powtec.2021.10.044](https://doi.org/10.1016/j.powtec.2021.10.044)  
 [ScienceDirect Link](https://www.sciencedirect.com/science/article/pii/S0032591021009268)
-""")
-
-st.sidebar.info("""
-**Acknowledgement**  
-This app is based on the research by Regucki et al.  
-We gratefully acknowledge their contributions.
 """)
 
 # ------------------- Control Panel -------------------
