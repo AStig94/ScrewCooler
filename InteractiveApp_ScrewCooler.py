@@ -42,7 +42,7 @@ lambda_biochar = st.sidebar.number_input("Thermal Conductivity (W/m·K)", min_va
 # ------------------- Acknowledgement -------------------
 with st.sidebar.expander("📚 Acknowledgement"):
     st.markdown("""
-This app is based on the following publication:
+This application is based on the following publication:
 
 **Paweł Regucki, Renata Krzyżyńska, Zbyszek Szeliga**  
 *Mathematical model for a single screw ash cooler of a circulating fluidized bed boiler*,  
