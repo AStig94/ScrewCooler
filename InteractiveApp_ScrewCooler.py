@@ -39,9 +39,8 @@ C_biochar = st.sidebar.number_input("Heat Capacity (J/kg·K)", min_value=100.0, 
 lambda_biochar = st.sidebar.number_input("Thermal Conductivity (W/m·K)", min_value=0.01, max_value=1.0, value=0.12, step=0.01)
 
 # ------------------- Acknowledgement -------------------
-# Sidebar citation in a styled info box
-st.sidebar.info("""
-**Acknowledgement**  
+with st.sidebar.expander("📚 Acknowledgement"):
+    st.markdown("""
 This app is based on the following publication:
 
 **Paweł Regucki, Renata Krzyżyńska, Zbyszek Szeliga**  
