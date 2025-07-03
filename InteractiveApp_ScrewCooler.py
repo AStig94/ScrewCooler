@@ -10,7 +10,7 @@ from scipy.optimize import root_scalar
 # ctrl+c to abort terminal..
 
 # ------------------- Setup -------------------
-st.set_page_config(layout="wide")
+st.set_page_config(page_title="Biochar Screw Cooler",layout="wide")
 st.title("Biochar Screw Cooler")
 st.markdown("Adjust the parameters to simulate the cooling screw behavior.")
 
