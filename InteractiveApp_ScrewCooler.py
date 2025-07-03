@@ -38,6 +38,9 @@ rho_biochar = st.sidebar.number_input("Density (kg/m³)", min_value=100.0, max_v
 C_biochar = st.sidebar.number_input("Heat Capacity (J/kg·K)", min_value=100.0, max_value=3000.0, value=1200.0, step=10.0)
 lambda_biochar = st.sidebar.number_input("Thermal Conductivity (W/m·K)", min_value=0.01, max_value=1.0, value=0.12, step=0.01)
 
+with st.sidebar.expander("📚 Acknowledgement"):
+    st.write("This is inside the sidebar expander!")
+
 # ------------------- Acknowledgement -------------------
 with st.expander("📚 Acknowledgement"):
     st.markdown("""
