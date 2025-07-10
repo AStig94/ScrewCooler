@@ -299,5 +299,10 @@ with col2:
         ax.grid(True)
         ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))
         st.pyplot(fig, use_container_width=True)
+        
+st.sidebar.markdown("### 🌡️ Cooling Water Temperatures")
+st.sidebar.metric("Cooling Water Inlet Temperature (°C)", f"{t_water_in}")
+st.sidebar.metric("Shaft Water Outlet Temp (°C)", f"{t_s[-1]:.1f}" if cool_shaft else "N/A")
+st.sidebar.metric("Outer Water Outlet Temp (°C)", f"{t_c[-1]:.1f}")
 
     plot_perimeters()
