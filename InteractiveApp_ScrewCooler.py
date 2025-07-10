@@ -286,7 +286,7 @@ with col2:
         if cool_shaft:
             ax.plot(z_so, -y_so, 'r', lw=3, label='Wetted Inner Perimeter')
         ax.plot(z_wo, -y_wo, 'b', lw=3, label='Wetted Outer Perimeter')
-        ax.fill(y_fill, z_fill, color='lightblue', alpha=0.3, label='Filled Region', edgecolor='none')
+        ax.fill(y_fill, z_fill, color='lightblue', alpha=0.3, label='Biochar Filled Region', edgecolor='none')
         ax.set_aspect('equal')
         ax.set_title(f"Wetted Perimeters (f_fill = {100*f_fill:.1f}%)")
         ax.set_xlabel('z (m)')
