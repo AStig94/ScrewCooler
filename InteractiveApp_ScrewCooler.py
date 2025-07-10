@@ -19,10 +19,11 @@ st.markdown("Adjust the parameters to simulate the cooling screw behavior.")
 # Simulation properties
 st.sidebar.markdown("### Simulation Parameters")
 T_target = st.sidebar.number_input("Biochar Target Temperature (°C)", min_value=30, max_value=350, value=30, step=10)
+t_water_in = st.sidebar.number_input("Cooling water temperature IN (°C)", min_value=T_target-5, max_value=50, value=25, step=1)
 cool_shaft = st.sidebar.checkbox("Enable Shaft Cooling", True)
 
-# Biochar flow rate slider (kg/hr)
-m_biochar_kg_hr = st.sidebar.slider("Biochar Mass Flow Rate (kg/hr)", 10, 300, 80, step=10)
+# Biochar flow rate (kg/hr)
+m_biochar_kg_hr = st.sidebar.number.input("Biochar Mass Flow Rate (kg/hr)", min_value=10, max_value=300, value=80, step=10)
 m_biochar = m_biochar_kg_hr / 3600  # convert to kg/s
 
 
@@ -104,7 +105,7 @@ q_v_water_c = area_c * v_c
 
 # ------------------- Inlet temperatures -------------------
 t_biochar_in = 350
-t_water_in = 25
+#t_water_in = 25
 
 # ------------------- Numerical settings -------------------
 dx = 0.05
