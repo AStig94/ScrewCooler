@@ -23,7 +23,7 @@ t_water_in = st.sidebar.number_input("Cooling water temperature IN (°C)", min_v
 cool_shaft = st.sidebar.checkbox("Enable Shaft Cooling", True)
 
 # Biochar flow rate (kg/hr)
-m_biochar_kg_hr = st.sidebar.number.input("Biochar Mass Flow Rate (kg/hr)", min_value=10, max_value=300, value=80, step=10)
+m_biochar_kg_hr = st.sidebar.number_input("Biochar Mass Flow Rate (kg/hr)", min_value=10, max_value=300, value=80, step=10)
 m_biochar = m_biochar_kg_hr / 3600  # convert to kg/s
 
 
