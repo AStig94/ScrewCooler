@@ -151,7 +151,7 @@ def compute_geometry_and_wetted_perimeters(r2, r3, q_v_biochar, pitch, n_rps):
     v_char = pitch * n_rps
     f_fill = q_v_biochar / (A_annulus * v_char)
     if f_fill > 1.0:
-        st.error(f"❌ Degree of fill too high: {f_fill:.3f}. Please increase screw RPM or diameter.")
+        st.error(f"❌ Degree of fill too high: {f_fill:.3f}. Please adjust parameters.")
         st.stop()
     O_w, O_s, h_char = compute_wetted_perimeters(f_fill, r3, r2)
     return f_fill, O_w, O_s, h_char
