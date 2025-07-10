@@ -40,19 +40,6 @@ C_biochar = st.sidebar.number_input("Heat Capacity (J/kg·K)", min_value=100.0, 
 lambda_biochar = st.sidebar.number_input("Thermal Conductivity (W/m·K)", min_value=0.01, max_value=1.0, value=0.12, step=0.01)
 
 
-# ------------------- Acknowledgement -------------------
-with st.sidebar.expander("📚 Acknowledgement"):
-    st.markdown("""
-This application is based on the following publication:
-
-**Paweł Regucki, Renata Krzyżyńska, Zbyszek Szeliga**  
-*Mathematical model for a single screw ash cooler of a circulating fluidized bed boiler*,  
-**Powder Technology**, Volume 396, Part A, 2022, Pages 50–58.  
-ISSN: 0032-5910  
-[DOI: 10.1016/j.powtec.2021.10.044](https://doi.org/10.1016/j.powtec.2021.10.044)  
-[ScienceDirect Link](https://www.sciencedirect.com/science/article/pii/S0032591021009268)
-""")
-
 # ------------------- Constants -------------------
 g = 9.81
 pi = np.pi
@@ -90,17 +77,17 @@ n_rps = n_rpm / 60
 q_v_biochar = m_biochar / rho_biochar
 
 # ------------------- Calculate water flow rates based on velocity = 1 m/s -------------------
+v_w = 1.0  # desired velocity m/s
+
 # Shaft cooling water velocity and volumetric flow rate
 D_h_s = r2 * 2
 area_s = pi * r2**2
-v_s = 1.0  # desired velocity m/s
-q_v_water_s = area_s * v_s
+q_v_water_s = area_s * v_w
 
 # Outer cooling water velocity and volumetric flow rate
 D_h_c = (2 * r5) - (2 * r4)
 area_c = pi * (r5**2 - r4**2)
-v_c = 1.0  # desired velocity m/s
-q_v_water_c = area_c * v_c
+q_v_water_c = area_c * v_w
 
 # ------------------- Inlet temperatures -------------------
 t_biochar_in = 350
@@ -194,7 +181,7 @@ col1, col2 = st.columns(2)
 with col1:
     fig, ax = plt.subplots(figsize=(6, 4), dpi=80)
     results = []
-
+    cooling_results = []
     for x_model in x_vals:
         alpha_biochar_s = alpha_biochar(lambda_biochar, rho_biochar, C_biochar, n_rps, x_model, c, 2 * r2)
         alpha_biochar_c = alpha_biochar(lambda_biochar, rho_biochar, C_biochar, n_rps, x_model, c, 2 * r3)
@@ -232,6 +219,14 @@ with col1:
             label = f"x = {x_model}, L = {required_length:.2f} m"
         ax.plot(x_grid[:i+2], t_a[:i+2], label=label)
         results.append((x_model, required_length, alpha_s if cool_shaft else 0.0, alpha_c))
+
+        t_s_out = t_s[i+1] if cool_shaft else None
+        t_c_out = t_c[i+1]
+        cooling_results.append({
+        "x": x_model,
+        "T_water_shaft_out (°C)": f"{t_s_out:.1f}" if t_s_out is not None else "N/A",
+        "T_water_casing_out (°C)": f"{t_c_out:.1f}",
+})
 
     ax.set_xlabel("Length along cooler (m)")
     ax.set_ylabel("Temperature (°C)")
@@ -301,7 +296,27 @@ with col2:
         st.pyplot(fig, use_container_width=True)
     plot_perimeters()
 
-st.sidebar.markdown("### 🌡️ Cooling Water Temperatures")
-st.sidebar.metric("Cooling Water Inlet Temperature (°C)", f"{t_water_in}")
-st.sidebar.metric("Shaft Water Outlet Temp (°C)", f"{t_s[-1]:.1f}" if cool_shaft else "N/A")
-st.sidebar.metric("Outer Water Outlet Temp (°C)", f"{t_c[-1]:.1f}")
+with st.sidebar.expander("🌡️ Cooling Water Temperatures"):
+    st.markdown("### Cooling Water Inlet Temperature")
+    st.markdown(f"{t_water_in} °C")
+    
+    st.markdown("### Cooling Water Outlet Temperatures")
+    for entry in cooling_results:
+        st.markdown(f"- x: {entry['x']}, Shaft Out: {entry['T_water_shaft_out (°C)']} °C, Casing Out: {entry['T_water_casing_out (°C)']} °C")
+    
+    st.markdown("---")  # horizontal separator
+    
+    st.markdown(f"**Cooling Water Velocity in Shaft and Casing:** {v_w} m/s")
+
+# ------------------- Acknowledgement -------------------
+with st.sidebar.expander("📚 Acknowledgement"):
+    st.markdown("""
+This application is based on the following publication:
+
+**Paweł Regucki, Renata Krzyżyńska, Zbyszek Szeliga**  
+*Mathematical model for a single screw ash cooler of a circulating fluidized bed boiler*,  
+**Powder Technology**, Volume 396, Part A, 2022, Pages 50–58.  
+ISSN: 0032-5910  
+[DOI: 10.1016/j.powtec.2021.10.044](https://doi.org/10.1016/j.powtec.2021.10.044)  
+[ScienceDirect Link](https://www.sciencedirect.com/science/article/pii/S0032591021009268)
+""")
