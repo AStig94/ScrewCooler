@@ -111,7 +111,7 @@ area_c = pi * (r5**2 - r4**2)
 q_v_water_c = area_c * v_w
 
 # ------------------- Inlet temperatures -------------------
-t_water_in = 25
+t_water_in = 20
 
 # ------------------- Numerical settings -------------------
 dx = 0.05
@@ -340,5 +340,6 @@ ISSN: 0032-5910
 [DOI: 10.1016/j.powtec.2021.10.044](https://doi.org/10.1016/j.powtec.2021.10.044)  
 [ScienceDirect Link](https://www.sciencedirect.com/science/article/pii/S0032591021009268)
 """)
+
 
 
