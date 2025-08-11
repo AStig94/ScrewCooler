@@ -18,6 +18,7 @@ st.markdown("Adjust the parameters to simulate the cooling screw behavior.")
 
 # Simulation properties
 st.sidebar.markdown("### Simulation Parameters")
+t_biochar_in = st.sidebar.number_input("Biochar Initial Temperature (°C)", min_value=50, max_value=500, value=350, step=10)
 T_target = st.sidebar.number_input("Biochar Target Temperature (°C)", min_value=30, max_value=350, value=30, step=10)
 cool_shaft = st.sidebar.checkbox("Enable Shaft Cooling", True)
 
@@ -39,6 +40,9 @@ rho_biochar = st.sidebar.number_input("Density (kg/m³)", min_value=100.0, max_v
 C_biochar = st.sidebar.number_input("Heat Capacity (J/kg·K)", min_value=100.0, max_value=3000.0, value=1200.0, step=10.0)
 lambda_biochar = st.sidebar.number_input("Thermal Conductivity (W/m·K)", min_value=0.01, max_value=1.0, value=0.12, step=0.01)
 
+# Cooling duty calculation (kW) based on m*cp*ΔT
+cooling_duty_kw = m_biochar * C_biochar * (t_biochar_in - T_target) / 1000.0
+st.sidebar.markdown(f"**Cooling Duty (kW):** {cooling_duty_kw:.2f}")
 
 # ------------------- Constants -------------------
 g = 9.81
@@ -90,7 +94,6 @@ area_c = pi * (r5**2 - r4**2)
 q_v_water_c = area_c * v_w
 
 # ------------------- Inlet temperatures -------------------
-t_biochar_in = 350
 t_water_in = 25
 
 # ------------------- Numerical settings -------------------
@@ -320,3 +323,4 @@ ISSN: 0032-5910
 [DOI: 10.1016/j.powtec.2021.10.044](https://doi.org/10.1016/j.powtec.2021.10.044)  
 [ScienceDirect Link](https://www.sciencedirect.com/science/article/pii/S0032591021009268)
 """)
+
