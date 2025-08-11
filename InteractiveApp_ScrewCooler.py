@@ -42,7 +42,24 @@ lambda_biochar = st.sidebar.number_input("Thermal Conductivity (W/m·K)", min_va
 
 # Cooling duty calculation (kW) based on m*cp*ΔT
 cooling_duty_kw = m_biochar * C_biochar * (t_biochar_in - T_target) / 1000.0
-st.sidebar.markdown(f"**Cooling Duty (kW):** {cooling_duty_kw:.2f}")
+
+st.sidebar.markdown(
+    f"""
+    <div style="
+        padding: 0.6em;
+        margin-top: 0.5em;
+        border-radius: 8px;
+        background-color: #f0f2f6;
+        border: 1px solid #d3d3d3;
+        text-align: center;
+        font-size: 1.2em;
+        font-weight: bold;
+        color: #333;">
+        💧 Cooling Duty: <span style="color:#007acc;">{cooling_duty_kw:.2f} kW</span>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
 # ------------------- Constants -------------------
 g = 9.81
@@ -323,4 +340,5 @@ ISSN: 0032-5910
 [DOI: 10.1016/j.powtec.2021.10.044](https://doi.org/10.1016/j.powtec.2021.10.044)  
 [ScienceDirect Link](https://www.sciencedirect.com/science/article/pii/S0032591021009268)
 """)
+
 
