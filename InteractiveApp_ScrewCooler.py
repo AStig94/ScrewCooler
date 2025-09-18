@@ -10,13 +10,11 @@ from scipy.optimize import root_scalar
 # ctrl+c to abort terminal..
 
 # ------------------- Setup -------------------
-st.set_page_config(page_title="Biochar Screw Cooler",layout="wide")
+st.set_page_config(page_title="Biochar Screw Cooler", layout="wide")
 st.title("Biochar Screw Cooler")
 st.markdown("Adjust the parameters to simulate the cooling screw behavior.")
 
 # ------------------- Control Panel -------------------
-
-# Simulation properties
 st.sidebar.markdown("### Simulation Parameters")
 t_biochar_in = st.sidebar.number_input("Biochar Initial Temperature (°C)", min_value=50, max_value=500, value=350, step=10)
 T_target = st.sidebar.number_input("Biochar Target Temperature (°C)", min_value=30, max_value=350, value=30, step=10)
@@ -26,13 +24,11 @@ cool_shaft = st.sidebar.checkbox("Enable Shaft Cooling", True)
 m_biochar_kg_hr = st.sidebar.number_input("Biochar Mass Flow Rate (kg/hr)", min_value=10, max_value=300, value=80, step=10)
 m_biochar = m_biochar_kg_hr / 3600  # convert to kg/s
 
-
 # Screw parameters
 st.sidebar.markdown("### Screw Parameters")
 rpm = st.sidebar.slider("Screw RPM", 1, 8, 6)
 screw_diameter = st.sidebar.slider("Screw Diameter (mm)", 100, 300, 140)
 screw_pitch_ratio = st.sidebar.slider("Pitch / Diameter Ratio", 0.1, 1.5, 0.5)
-
 
 # Biochar properties inputs
 st.sidebar.markdown("### Biochar Properties")
@@ -42,7 +38,6 @@ lambda_biochar = st.sidebar.number_input("Thermal Conductivity (W/m·K)", min_va
 
 # Cooling duty calculation (kW) based on m*cp*ΔT
 cooling_duty_kw = m_biochar * C_biochar * (t_biochar_in - T_target) / 1000.0
-
 st.sidebar.markdown(
     f"""
     <div style="
@@ -76,20 +71,15 @@ delta_steel = 0.002
 lambda_steel = 16.3
 
 # ------------------- Geometry -------------------
-# Set base diameter and scale others proportionally
-d3 = screw_diameter / 1000  # Convert mm to meters
+d3 = screw_diameter / 1000
 r3 = d3 / 2
-
-# Original ratios from your script
 r1_ratio = 0.126 / 0.248
 r5_ratio = 0.266 / 0.248
-
 r1 = r3 * r1_ratio
 r2 = r1 + delta_steel
 r4 = r3 + delta_steel
 r5 = r3 * r5_ratio
 r6 = r5 + delta_steel
-
 pitch = screw_pitch_ratio * (2 * r3)
 n_rpm = rpm
 n_rps = n_rpm / 60
@@ -97,15 +87,11 @@ n_rps = n_rpm / 60
 # ------------------- Compute Biochar volumetric flow rate -------------------
 q_v_biochar = m_biochar / rho_biochar
 
-# ------------------- Calculate water flow rates based on velocity = 1 m/s -------------------
-v_w = 1.0  # desired velocity m/s
-
-# Shaft cooling water velocity and volumetric flow rate
+# ------------------- Calculate water flow rates -------------------
+v_w = 1.0
 D_h_s = r2 * 2
 area_s = pi * r2**2
 q_v_water_s = area_s * v_w
-
-# Outer cooling water velocity and volumetric flow rate
 D_h_c = (2 * r5) - (2 * r4)
 area_c = pi * (r5**2 - r4**2)
 q_v_water_c = area_c * v_w
@@ -163,7 +149,6 @@ def compute_wetted_perimeters(f_fill, r_w, r_s):
     O_w = wetted_arc_length(h_char, r_w)
     h_s = max(h_char - (r_w - r_s), 0)
     O_s = wetted_arc_length(h_s, r_s)
-
     return O_w, O_s, h_char
 
 def compute_geometry_and_wetted_perimeters(r2, r3, q_v_biochar, pitch, n_rps):
@@ -178,38 +163,37 @@ def compute_geometry_and_wetted_perimeters(r2, r3, q_v_biochar, pitch, n_rps):
 
 # ------------------- Calculations -------------------
 f_fill, O_w, O_s, h_char = compute_geometry_and_wetted_perimeters(r2, r3, q_v_biochar, pitch, n_rps)
-
 v_s_calc = q_v_water_s / (pi * r2**2)
 v_c_calc = q_v_water_c / (pi * (r5**2 - r4**2))
 
-if cool_shaft:
-    alpha_steel_s = lambda_steel / ((r2) * np.log((r2) / r1))
-    alpha_water_s = alpha_water(rho_water, mu_water, C_water, lambda_water, D_h_s, v_s_calc)
-else:
-    alpha_steel_s = 0.0
-    alpha_water_s = 0.0
-
-alpha_steel_c = lambda_steel / ((r4) * np.log((r4) / r3))
+# Steel and water resistances (shaft and casing)
+alpha_steel_c = lambda_steel / (r4 * np.log(r4 / r3))
 alpha_water_c = alpha_water(rho_water, mu_water, C_water, lambda_water, D_h_c, v_c_calc)
 
 x_vals = [0.1, 0.3, 0.5, 0.7]
 c = 4.0
 
-# Create two columns for side by side plots
+# ------------------- Plots -------------------
 col1, col2 = st.columns(2)
-
 with col1:
     fig, ax = plt.subplots(figsize=(6, 4), dpi=80)
     results = []
     cooling_results = []
+
     for x_model in x_vals:
         alpha_biochar_s = alpha_biochar(lambda_biochar, rho_biochar, C_biochar, n_rps, x_model, c, 2 * r2)
         alpha_biochar_c = alpha_biochar(lambda_biochar, rho_biochar, C_biochar, n_rps, x_model, c, 2 * r3)
 
-        R_total_s = 1 / alpha_biochar_s + 1 / alpha_steel_s + 1 / alpha_water_s
-        R_total_c = 1 / alpha_biochar_c + 1 / alpha_steel_c + 1 / alpha_water_c
+        # ------------------- Corrected alpha_s -------------------
+        if cool_shaft:
+            alpha_steel_s = lambda_steel / (r2 * np.log(r2 / r1))
+            alpha_water_s = alpha_water(rho_water, mu_water, C_water, lambda_water, D_h_s, v_s_calc)
+            R_total_s = 1 / alpha_biochar_s + 1 / alpha_steel_s + 1 / alpha_water_s
+            alpha_s = 1 / R_total_s
+        else:
+            alpha_s = alpha_biochar_s  # shaft off
 
-        alpha_s = 1 / R_total_s
+        R_total_c = 1 / alpha_biochar_c + 1 / alpha_steel_c + 1 / alpha_water_c
         alpha_c = 1 / R_total_c
 
         t_a = np.zeros(steps)
@@ -232,26 +216,25 @@ with col1:
                 break
         else:
             required_length = max_length
-        
-        # Area-weighted overall U value (W/m²·K)
+
         total_area = O_s + O_w if cool_shaft else O_w
-        U_value = ((alpha_s * O_s) if cool_shaft else 0.0 + alpha_c * O_w) / total_area
-        
+        U_value = (alpha_s * O_s + alpha_c * O_w) / total_area if cool_shaft else alpha_c
+
         if required_length >= max_length:
             label = f"x = {x_model}, L > {max_length:.1f} m, U = {U_value:.1f} W/m²·K"
         else:
             label = f"x = {x_model}, L = {required_length:.2f} m, U = {U_value:.1f} W/m²·K"
-        
+
         ax.plot(x_grid[:i+2], t_a[:i+2], label=label)
         results.append((x_model, required_length, alpha_s if cool_shaft else 0.0, alpha_c))
 
         t_s_out = t_s[i+1] if cool_shaft else None
         t_c_out = t_c[i+1]
         cooling_results.append({
-        "x": x_model,
-        "T_water_shaft_out (°C)": f"{t_s_out:.1f}" if t_s_out is not None else "N/A",
-        "T_water_casing_out (°C)": f"{t_c_out:.1f}",
-})
+            "x": x_model,
+            "T_water_shaft_out (°C)": f"{t_s_out:.1f}" if t_s_out is not None else "N/A",
+            "T_water_casing_out (°C)": f"{t_c_out:.1f}",
+        })
 
     ax.set_xlabel("Length along cooler (m)")
     ax.set_ylabel("Temperature (°C)")
@@ -260,6 +243,7 @@ with col1:
     ax.legend()
     st.pyplot(fig, use_container_width=True)
 
+# ------------------- Perimeter plot -------------------
 with col2:
     def plot_perimeters():
         r_s = r2
@@ -321,6 +305,7 @@ with col2:
         st.pyplot(fig, use_container_width=True)
     plot_perimeters()
 
+# ------------------- Sidebar water temperatures -------------------
 with st.sidebar.expander("🌡️ Cooling Water Temperatures"):
     st.markdown("### Cooling Water Inlet Temperature")
     st.markdown(f"{t_water_in} °C")
@@ -329,8 +314,7 @@ with st.sidebar.expander("🌡️ Cooling Water Temperatures"):
     for entry in cooling_results:
         st.markdown(f"- x: {entry['x']}, Shaft Out: {entry['T_water_shaft_out (°C)']} °C, Casing Out: {entry['T_water_casing_out (°C)']} °C")
     
-    st.markdown("---")  # horizontal separator
-    
+    st.markdown("---")
     st.markdown(f"**Cooling Water Velocity in Shaft and Casing:** {v_w} m/s")
 
 # ------------------- Acknowledgement -------------------
@@ -345,8 +329,3 @@ ISSN: 0032-5910
 [DOI: 10.1016/j.powtec.2021.10.044](https://doi.org/10.1016/j.powtec.2021.10.044)  
 [ScienceDirect Link](https://www.sciencedirect.com/science/article/pii/S0032591021009268)
 """)
-
-
-
-
-
