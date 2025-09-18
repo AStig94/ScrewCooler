@@ -186,8 +186,8 @@ if cool_shaft:
     alpha_steel_s = lambda_steel / ((r2) * np.log((r2) / r1))
     alpha_water_s = alpha_water(rho_water, mu_water, C_water, lambda_water, D_h_s, v_s_calc)
 else:
-    alpha_steel_s = np.inf
-    alpha_water_s = np.inf
+    alpha_steel_s = 0.0
+    alpha_water_s = 0.0
 
 alpha_steel_c = lambda_steel / ((r4) * np.log((r4) / r3))
 alpha_water_c = alpha_water(rho_water, mu_water, C_water, lambda_water, D_h_c, v_c_calc)
@@ -345,6 +345,7 @@ ISSN: 0032-5910
 [DOI: 10.1016/j.powtec.2021.10.044](https://doi.org/10.1016/j.powtec.2021.10.044)  
 [ScienceDirect Link](https://www.sciencedirect.com/science/article/pii/S0032591021009268)
 """)
+
 
 
 
