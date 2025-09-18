@@ -242,7 +242,7 @@ with col1:
     ax.set_ylabel("Temperature (°C)")
     ax.set_title("Biochar Cooling Profile")
     ax.grid(True)
-    ax.legend(loc='center left', bbox_to_anchor=(1, 0.5), fontsize=9)
+    ax.legend(loc='lower center', bbox_to_anchor=(0.5, -0.25), ncol=1, fontsize=9)
     st.pyplot(fig, use_container_width=True)
 
 # ------------------- Perimeter plot -------------------
@@ -331,6 +331,7 @@ ISSN: 0032-5910
 [DOI: 10.1016/j.powtec.2021.10.044](https://doi.org/10.1016/j.powtec.2021.10.044)  
 [ScienceDirect Link](https://www.sciencedirect.com/science/article/pii/S0032591021009268)
 """)
+
 
 
 
