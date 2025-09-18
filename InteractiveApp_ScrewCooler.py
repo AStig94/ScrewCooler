@@ -184,14 +184,13 @@ with col1:
         alpha_biochar_s = alpha_biochar(lambda_biochar, rho_biochar, C_biochar, n_rps, x_model, c, 2 * r2)
         alpha_biochar_c = alpha_biochar(lambda_biochar, rho_biochar, C_biochar, n_rps, x_model, c, 2 * r3)
 
-        # ------------------- Corrected alpha_s -------------------
         if cool_shaft:
             alpha_steel_s = lambda_steel / (r2 * np.log(r2 / r1))
             alpha_water_s = alpha_water(rho_water, mu_water, C_water, lambda_water, D_h_s, v_s_calc)
             R_total_s = 1 / alpha_biochar_s + 1 / alpha_steel_s + 1 / alpha_water_s
             alpha_s = 1 / R_total_s
         else:
-            alpha_s = alpha_biochar_s  # shaft off
+            alpha_s = alpha_biochar_s
 
         R_total_c = 1 / alpha_biochar_c + 1 / alpha_steel_c + 1 / alpha_water_c
         alpha_c = 1 / R_total_c
@@ -220,12 +219,11 @@ with col1:
         total_area = O_s + O_w if cool_shaft else O_w
         U_value = (alpha_s * O_s + alpha_c * O_w) / total_area if cool_shaft else alpha_c
         U_linear = (alpha_s * O_s if cool_shaft else 0.0) + alpha_c * O_w  # W/m·K
-        
+
         if required_length >= max_length:
             label = f"x = {x_model}, L > {max_length:.1f} m, U = {U_value:.1f} W/m²·K, U_linear = {U_linear:.1f} W/m·K"
         else:
             label = f"x = {x_model}, L = {required_length:.2f} m, U = {U_value:.1f} W/m²·K, U_linear = {U_linear:.1f} W/m·K"
-        
 
         ax.plot(x_grid[:i+2], t_a[:i+2], label=label)
         results.append((x_model, required_length, alpha_s if cool_shaft else 0.0, alpha_c))
@@ -242,7 +240,13 @@ with col1:
     ax.set_ylabel("Temperature (°C)")
     ax.set_title("Biochar Cooling Profile")
     ax.grid(True)
+
+    # ---- Adjust bottom margin to prevent legend overlap ----
+    fig.subplots_adjust(bottom=0.25)  # leave room for legend below
+
+    # Place legend below the plot
     ax.legend(loc='lower center', bbox_to_anchor=(0.5, -0.25), ncol=1, fontsize=9)
+    
     st.pyplot(fig, use_container_width=True)
 
 # ------------------- Perimeter plot -------------------
@@ -331,6 +335,7 @@ ISSN: 0032-5910
 [DOI: 10.1016/j.powtec.2021.10.044](https://doi.org/10.1016/j.powtec.2021.10.044)  
 [ScienceDirect Link](https://www.sciencedirect.com/science/article/pii/S0032591021009268)
 """)
+
 
 
 
