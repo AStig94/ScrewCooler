@@ -220,13 +220,17 @@ with col1:
         U_value = (alpha_s * O_s + alpha_c * O_w) / total_area if cool_shaft else alpha_c
         U_linear = (alpha_s * O_s if cool_shaft else 0.0) + alpha_c * O_w  # W/m·K
 
-        if required_length >= max_length:
-            label = f"x = {x_model}, L > {max_length:.1f} m, U = {U_value:.1f} W/m²·K, U_linear = {U_linear:.1f} W/m·K"
-        else:
-            label = f"x = {x_model}, L = {required_length:.2f} m, U = {U_value:.1f} W/m²·K, U_linear = {U_linear:.1f} W/m·K"
-
+        # --- Simplified legend ---
+        label = f"x = {x_model}"
         ax.plot(x_grid[:i+2], t_a[:i+2], label=label)
-        results.append((x_model, required_length, alpha_s if cool_shaft else 0.0, alpha_c))
+
+        # --- Save results for Streamlit table ---
+        results.append({
+            "x_model": x_model,
+            "Required Length (m)": required_length,
+            "U (W/m²·K)": U_value,
+            "U_linear (W/m·K)": U_linear
+        })
 
         t_s_out = t_s[i+1] if cool_shaft else None
         t_c_out = t_c[i+1]
@@ -241,13 +245,17 @@ with col1:
     ax.set_title("Biochar Cooling Profile")
     ax.grid(True)
 
-    # ---- Adjust bottom margin to prevent legend overlap ----
-    fig.subplots_adjust(bottom=0.25)  # leave room for legend below
+    # Adjust bottom margin to prevent legend overlap
+    fig.subplots_adjust(bottom=0.2)
 
-    # Place legend below the plot
+    # Place legend below the plot (small and simple)
     ax.legend(loc='lower center', bbox_to_anchor=(0.5, -0.25), ncol=1, fontsize=9)
-    
+
     st.pyplot(fig, use_container_width=True)
+
+    # --- Streamlit table with U and U_linear ---
+    st.markdown("### Cooling Parameters")
+    st.table(results)
 
 # ------------------- Perimeter plot -------------------
 with col2:
@@ -335,6 +343,7 @@ ISSN: 0032-5910
 [DOI: 10.1016/j.powtec.2021.10.044](https://doi.org/10.1016/j.powtec.2021.10.044)  
 [ScienceDirect Link](https://www.sciencedirect.com/science/article/pii/S0032591021009268)
 """)
+
 
 
 
