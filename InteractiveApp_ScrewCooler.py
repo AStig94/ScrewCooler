@@ -226,10 +226,10 @@ with col1:
 
         # --- Save results for Streamlit table ---
         results.append({
-            "x_model": x_model,
-            "Required Length (m)": round(required_length, 1),
-            "U (W/m²·K)": round(U_value, 1),
-            "U_linear (W/m·K)": round(U_linear, 1)
+            "x_model": f"{x_model:.1f}",
+            "Required Length (m)": f"{required_length:.1f}",
+            "U (W/m²·K)": f"{U_value:.1f}",
+            "U_linear (W/m·K)": f"{U_linear:.1f}"
         })
 
         t_s_out = t_s[i+1] if cool_shaft else None
@@ -340,6 +340,7 @@ ISSN: 0032-5910
 [DOI: 10.1016/j.powtec.2021.10.044](https://doi.org/10.1016/j.powtec.2021.10.044)  
 [ScienceDirect Link](https://www.sciencedirect.com/science/article/pii/S0032591021009268)
 """)
+
 
 
 
