@@ -226,7 +226,6 @@ with col1:
         else:
             label = f"x = {x_model}, L = {required_length:.2f} m, U = {U_value:.1f} W/m²·K, U_linear = {U_linear:.1f} W/m·K"
         
-        ax.plot(x_grid[:i+2], t_a[:i+2], label=label)
 
         ax.plot(x_grid[:i+2], t_a[:i+2], label=label)
         results.append((x_model, required_length, alpha_s if cool_shaft else 0.0, alpha_c))
@@ -332,6 +331,7 @@ ISSN: 0032-5910
 [DOI: 10.1016/j.powtec.2021.10.044](https://doi.org/10.1016/j.powtec.2021.10.044)  
 [ScienceDirect Link](https://www.sciencedirect.com/science/article/pii/S0032591021009268)
 """)
+
 
 
 
